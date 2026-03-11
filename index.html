@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es-MX">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BTS Arirang 2026 💜</title>
     <script src="https://cdn.tailwindcss.com"></script>
-      <link rel="manifest" href="./manifest.json">
+     <link rel="manifest" href="./manifest.json">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Gaegu:wght@400;700&display=swap');
@@ -23,8 +23,6 @@
             color: #4a4a4a;
             overflow-x: hidden;
         }
-
-        /* Removed bg-blobs and floating-emoji styles */
 
         .cute-card {
             background: rgba(255, 255, 255, 0.95);
@@ -92,13 +90,13 @@
 
     <div class="app-container">
         <div class="flex flex-col items-center">
-            <div id="kst-time" class="kst-clock mb-2">KST: --:--:--</div>
+            <div id="kst-time" class="kst-clock mb-2">Hora Seúl: --:--:--</div>
             <div class="player-bar w-full">
                 <button onclick="toggleAudio()" id="play-btn" class="text-purple-400 hover:text-purple-600 outline-none">
                     <i class="fas fa-play"></i>
                 </button>
                 <div class="flex-grow overflow-hidden">
-                    <marquee id="song-title" scrollamount="3" class="text-[10px] font-bold text-gray-500">Press Play to Stream BTS Vibes 💜</marquee>
+                    <marquee id="song-title" scrollamount="3" class="text-[10px] font-bold text-gray-500">¡Dale Play para las vibras de BTS! 💜</marquee>
                 </div>
                 <audio id="bg-audio" loop>
                     <source src="https://stream.zeno.fm/f36y066df0hvv" type="audio/mpeg">
@@ -123,13 +121,13 @@
 
         <div class="cute-card p-4">
             <div class="grid grid-cols-7 gap-1 mb-2 text-center text-pink-200 font-bold text-[9px] uppercase">
-                <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
             </div>
             <div id="calendar-grid" class="grid grid-cols-7 gap-1"></div>
         </div>
 
         <div class="watermark uppercase">
-            From Lone to Dr. Gaby — Stay Golden 💜
+            De Lone para la Dra. Gaby — ¡Puro brillo, Army! 💜
         </div>
     </div>
 
@@ -139,15 +137,15 @@
             <h3 id="modal-date" class="text-pink-300 font-bold text-[10px] mb-1 uppercase tracking-widest"></h3>
             <p id="modal-desc" class="text-gray-700 text-sm font-semibold mb-5"></p>
             <div class="border-t border-pink-50 pt-4 text-left">
-                <p class="text-[9px] text-gray-400 font-bold mb-2 uppercase">Note</p>
-                <input type="text" id="personal-input" placeholder="..." class="w-full border border-pink-50 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-pink-200 mb-3 bg-white/50">
-                <button onclick="savePersonal()" class="w-full bg-purple-400 text-white font-bold py-2 rounded-full text-xs active:scale-95 transition-transform">Save</button>
+                <p class="text-[9px] text-gray-400 font-bold mb-2 uppercase">Chismecito / Nota</p>
+                <input type="text" id="personal-input" placeholder="Anota algo aquí..." class="w-full border border-pink-50 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-pink-200 mb-3 bg-white/50">
+                <button onclick="savePersonal()" class="w-full bg-purple-400 text-white font-bold py-2 rounded-full text-xs active:scale-95 transition-transform">¡A darle!</button>
             </div>
         </div>
     </div>
 
     <script>
-     if ('serviceWorker' in navigator) {
+          if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js')
                     .then(reg => console.log('SW Registered'))
@@ -155,35 +153,33 @@
             });
         }
         
-
-      
         const emojiMap = { album:'1f4bf', concert:'1f3df', yt:'1f4f9', bday:'1f382', heart:'1f49c', star:'2b50', flower:'1f338', sparkle:'2728', flag:'1f1f2-1f1fd', shop:'1f6cd', tv:'1f4fa' };
         const getEmojiUrl = (c) => `https://cdnjs.cloudflare.com/ajax/libs/emoji-datasource-apple/15.0.0/img/apple/64/${c}.png`;
 
         const btsEvents = {
-            "2026-02-18": { type: 'bday', desc: "Hoseok Day! 🐿️" },
-            "2026-03-09": { type: 'bday', desc: "Yoongi Day! 🐱" },
-            "2026-03-15": { type: 'yt', desc: "YouTube: 'Arirang' MV Teaser 1" },
-            "2026-03-18": { type: 'yt', desc: "YouTube: 'Arirang' MV Teaser 2" },
-            "2026-03-20": { type: 'album', desc: "ARIRANG Album Release! 💿" },
-            "2026-03-21": { type: 'tv', desc: "Comeback Special Live: BANGTANTV" },
-            "2026-03-24": { type: 'yt', desc: "BANGTANTV: Arirang Jacket Shoot Episode" },
-            "2026-03-27": { type: 'tv', desc: "Suchwita Arirang Special (Guest: OT7)" },
-            "2026-05-01": { type: 'star', desc: "Tour Rehearsals: CDMX Stadium Prep" },
-            "2026-05-07": { type: 'flag', desc: "BTS TOUR: Mexico City - Day 1 🇲🇽", isMexico: true },
-            "2026-05-09": { type: 'flag', desc: "BTS TOUR: Mexico City - Day 2 🇲🇽", isMexico: true },
-            "2026-05-10": { type: 'flag', desc: "BTS TOUR: Mexico City - Day 3 🇲🇽", isMexico: true },
-            "2026-05-15": { type: 'yt', desc: "BANGTAN BOMB: Mexico Food Tour" },
-            "2026-06-01": { type: 'flower', desc: "BTS FESTA 2026 Begins! 🌸" },
-            "2026-06-08": { type: 'yt', desc: "Run BTS! 2026 Special (Part 1)" },
-            "2026-06-12": { type: 'shop', desc: "Arirang Pop-Up Store Opens: CDMX 🛍️", isMexico: true },
-            "2026-06-13": { type: 'heart', desc: "BTS 13th ANNIVERSARY! 💜" },
-            "2026-06-15": { type: 'yt', desc: "Run BTS! 2026 Special (Part 2)" },
-            "2026-09-01": { type: 'bday', desc: "Jungkook Day! 🐰" },
-            "2026-09-12": { type: 'bday', desc: "Namjoon Day! 🐨" },
-            "2026-10-13": { type: 'bday', desc: "Jimin Day! 🐥" },
-            "2026-12-04": { type: 'bday', desc: "Seokjin Day! 🐹" },
-            "2026-12-30": { type: 'bday', desc: "Taehyung Day! 🐯" }
+            "2026-02-18": { type: 'bday', desc: "¡Día de Hoseok! 🐿️" },
+            "2026-03-09": { type: 'bday', desc: "¡Día de Yoongi! 🐱" },
+            "2026-03-15": { type: 'yt', desc: "YouTube: Teaser 1 del MV de 'Arirang'" },
+            "2026-03-18": { type: 'yt', desc: "YouTube: Teaser 2 del MV de 'Arirang'" },
+            "2026-03-20": { type: 'album', desc: "¡Lanzamiento del Álbum ARIRANG! 💿" },
+            "2026-03-21": { type: 'tv', desc: "En vivo especial de regreso: BANGTANTV" },
+            "2026-03-24": { type: 'yt', desc: "BANGTANTV: Detrás del Jacket Shoot de Arirang" },
+            "2026-03-27": { type: 'tv', desc: "Suchwita Especial Arirang (Invitados: OT7)" },
+            "2026-05-01": { type: 'star', desc: "Ensayos del Tour: Preparativos en el Estadio de CDMX" },
+            "2026-05-07": { type: 'flag', desc: "BTS TOUR: Ciudad de México - Día 1 🇲🇽", isMexico: true },
+            "2026-05-09": { type: 'flag', desc: "BTS TOUR: Ciudad de México - Día 2 🇲🇽", isMexico: true },
+            "2026-05-10": { type: 'flag', desc: "BTS TOUR: Ciudad de México - Día 3 🇲🇽", isMexico: true },
+            "2026-05-15": { type: 'yt', desc: "BANGTAN BOMB: Tour de Garnachas en CDMX" },
+            "2026-06-01": { type: 'flower', desc: "¡Arranca el BTS FESTA 2026! 🌸" },
+            "2026-06-08": { type: 'yt', desc: "Run BTS! 2026 Especial (Parte 1)" },
+            "2026-06-12": { type: 'shop', desc: "Abre la Pop-Up Store Arirang en CDMX 🛍️", isMexico: true },
+            "2026-06-13": { type: 'heart', desc: "¡13er ANIVERSARIO de BTS! 💜" },
+            "2026-06-15": { type: 'yt', desc: "Run BTS! 2026 Especial (Parte 2)" },
+            "2026-09-01": { type: 'bday', desc: "¡Día de Jungkook! 🐰" },
+            "2026-09-12": { type: 'bday', desc: "¡Día de Namjoon! 🐨" },
+            "2026-10-13": { type: 'bday', desc: "¡Día de Jimin! 🐥" },
+            "2026-12-04": { type: 'bday', desc: "¡Día de Seokjin! 🐹" },
+            "2026-12-30": { type: 'bday', desc: "¡Día de Taehyung! 🐯" }
         };
 
         let personalEvents = JSON.parse(localStorage.getItem('army_personal_events') || '{}');
@@ -197,18 +193,18 @@
             if (audio.paused) {
                 audio.play();
                 btn.innerHTML = '<i class="fas fa-pause"></i>';
-                title.innerText = "Streaming: Lofi Girl x BTS Radio 💜";
+                title.innerText = "Escuchando: Lofi Girl x BTS Radio 💜";
             } else {
                 audio.pause();
                 btn.innerHTML = '<i class="fas fa-play"></i>';
-                title.innerText = "Paused";
+                title.innerText = "En pausa";
             }
         }
 
         function updateKST() {
             const now = new Date();
             const kst = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (9 * 3600000));
-            document.getElementById('kst-time').innerText = `KST: ${kst.getHours().toString().padStart(2,'0')}:${kst.getMinutes().toString().padStart(2,'0')}:${kst.getSeconds().toString().padStart(2,'0')}`;
+            document.getElementById('kst-time').innerText = `Hora Seúl: ${kst.getHours().toString().padStart(2,'0')}:${kst.getMinutes().toString().padStart(2,'0')}:${kst.getSeconds().toString().padStart(2,'0')}`;
         }
 
         function updateCountdown() {
@@ -217,8 +213,8 @@
             const display = document.getElementById('countdown');
             if(diff > 0) {
                 const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                display.innerText = `${days} Days to 13th Anniversary`;
-            } else { display.innerText = `Happy Anniversary! 💜`; }
+                display.innerText = `Faltan ${days} días para el 13er Aniversario`;
+            } else { display.innerText = `¡Feliz Aniversario, Army! 💜`; }
         }
 
         function render() {
@@ -226,7 +222,8 @@
             grid.innerHTML = '';
             const y = viewDate.getFullYear();
             const m = viewDate.getMonth();
-            document.getElementById('current-month').innerText = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(viewDate);
+            const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+            document.getElementById('current-month').innerText = `${monthNames[m]} ${y}`;
             const first = new Date(y, m, 1).getDay();
             const last = new Date(y, m + 1, 0).getDate();
             const todayStr = new Date().toISOString().split('T')[0];
@@ -258,8 +255,12 @@
             const ev = btsEvents[key];
             const personal = personalEvents[key];
             document.getElementById('modal-emoji-box').innerHTML = `<div class="a-emoji w-16 h-16" style="background-image: url('${getEmojiUrl(ev ? emojiMap[ev.type] : emojiMap.star)}')"></div>`;
-            document.getElementById('modal-date').innerText = new Date(key).toDateString();
-            document.getElementById('modal-desc').innerText = ev ? ev.desc : (personal ? personal : "Special BTS Day ✨");
+            
+            const dateObj = new Date(key + "T12:00:00");
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('modal-date').innerText = dateObj.toLocaleDateString('es-MX', options);
+            
+            document.getElementById('modal-desc').innerText = ev ? ev.desc : (personal ? personal : "¡Un día especial de BTS! ✨");
             document.getElementById('personal-input').value = personal || "";
             document.getElementById('event-modal').style.display = 'flex';
         }
@@ -282,7 +283,8 @@
 
         window.onload = () => {
             const today = new Date();
-            document.getElementById('today-display').innerText = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            const options = { month: 'long', day: 'numeric', year: 'numeric' };
+            document.getElementById('today-display').innerText = today.toLocaleDateString('es-MX', options);
             render();
             setInterval(updateKST, 1000);
             updateCountdown();
