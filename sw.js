@@ -1,4 +1,4 @@
-const cacheName = 'asim-ledger-v1';
+const cacheName = 'arirangcalendar-v1';
 const assets = [
   './',
   './index.html',
