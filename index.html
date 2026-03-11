@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BTS Arirang 2026 💜</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+      <link rel="manifest" href="./manifest.json">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Gaegu:wght@400;700&display=swap');
+        
+        :root {
+            --bts-purple: #9d81ff;
+            --light-purple: #e9e3ff;
+            --soft-pink: #ffc2d1;
+        }
+
+        body, html {
+            margin: 0; padding: 0; min-height: 100vh; width: 100%;
+            font-family: 'Fredoka', sans-serif;
+            background: #fdf2f8;
+            color: #4a4a4a;
+            overflow-x: hidden;
+        }
+
+        /* Removed bg-blobs and floating-emoji styles */
+
+        .cute-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 4px solid #fff;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.08);
+        }
+
+        .day-cell {
+            aspect-ratio: 1;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; font-weight: 600; cursor: pointer; font-size: 0.8rem;
+            transition: all 0.2s;
+            position: relative;
+            border: 1px solid transparent;
+        }
+
+        .day-cell:hover { background: white; transform: scale(1.1); border-color: #eee; z-index: 10; }
+
+        .today { background: var(--bts-purple) !important; color: white !important; box-shadow: 0 4px 10px rgba(157, 129, 255, 0.3); }
+
+        .has-event { border: 1px dashed var(--bts-purple); background: var(--light-purple); }
+        .has-personal { border: 1px solid #c3f5ca; background: #f7fff8; }
+        .has-mexico { border: 1px solid #2d8a69; background: #f4faf8; }
+
+        .a-emoji { display: inline-block; width: 1.2em; height: 1.2em; background-size: contain; background-repeat: no-repeat; background-position: center; vertical-align: middle; }
+        
+        .app-container {
+            width: 100%; max-width: 450px; margin: 0 auto;
+            padding: 1rem; min-height: 100vh;
+            display: flex; flex-direction: column; gap: 0.75rem;
+            justify-content: flex-start;
+            position: relative;
+            z-index: 1;
+        }
+
+        .watermark {
+            text-align: center; font-family: 'Gaegu', cursive;
+            font-size: 0.75rem; color: rgba(157, 129, 255, 0.6);
+            padding: 1rem 0;
+            margin-top: auto;
+        }
+        
+        .mexico-dot {
+            position: absolute; bottom: 3px; width: 4px; height: 4px;
+            background: #ce1126; border-radius: 50%;
+        }
+
+        .player-bar {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 100px; padding: 10px 20px;
+            display: flex; align-items: center; gap: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .kst-clock {
+            font-size: 10px; color: var(--bts-purple); font-weight: 700;
+            background: white; padding: 2px 10px; border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <div class="flex flex-col items-center">
+            <div id="kst-time" class="kst-clock mb-2">KST: --:--:--</div>
+            <div class="player-bar w-full">
+                <button onclick="toggleAudio()" id="play-btn" class="text-purple-400 hover:text-purple-600 outline-none">
+                    <i class="fas fa-play"></i>
+                </button>
+                <div class="flex-grow overflow-hidden">
+                    <marquee id="song-title" scrollamount="3" class="text-[10px] font-bold text-gray-500">Press Play to Stream BTS Vibes 💜</marquee>
+                </div>
+                <audio id="bg-audio" loop>
+                    <source src="https://stream.zeno.fm/f36y066df0hvv" type="audio/mpeg">
+                </audio>
+            </div>
+        </div>
+
+        <div class="cute-card p-4 text-center">
+            <h1 class="text-2xl font-bold text-pink-500 flex items-center justify-center gap-2">
+                <span class="a-emoji" style="background-image: url('https://cdnjs.cloudflare.com/ajax/libs/emoji-datasource-apple/15.0.0/img/apple/64/1f49c.png')"></span>
+                BTS 2026
+            </h1>
+            <div id="today-display" class="text-purple-400 font-bold text-[9px] uppercase tracking-widest mt-1"></div>
+            <div id="countdown" class="text-[9px] text-pink-300 font-bold mt-1 uppercase"></div>
+        </div>
+
+        <div class="flex justify-between items-center px-2">
+            <button onclick="changeMonth(-1)" class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-pink-300 shadow-sm"><i class="fas fa-chevron-left"></i></button>
+            <h2 id="current-month" class="text-sm font-bold text-gray-600 uppercase tracking-widest"></h2>
+            <button onclick="changeMonth(1)" class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-pink-300 shadow-sm"><i class="fas fa-chevron-right"></i></button>
+        </div>
+
+        <div class="cute-card p-4">
+            <div class="grid grid-cols-7 gap-1 mb-2 text-center text-pink-200 font-bold text-[9px] uppercase">
+                <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+            </div>
+            <div id="calendar-grid" class="grid grid-cols-7 gap-1"></div>
+        </div>
+
+        <div class="watermark uppercase">
+            From Lone to Dr. Gaby — Stay Golden 💜
+        </div>
+    </div>
+
+    <div id="event-modal" class="fixed inset-0 bg-pink-100/40 backdrop-blur-md hidden items-center justify-center z-50 p-6" onclick="closeModal()">
+        <div class="cute-card p-6 max-w-xs w-full text-center border-none shadow-2xl" onclick="event.stopPropagation()">
+            <div id="modal-emoji-box" class="mb-3 flex justify-center"></div>
+            <h3 id="modal-date" class="text-pink-300 font-bold text-[10px] mb-1 uppercase tracking-widest"></h3>
+            <p id="modal-desc" class="text-gray-700 text-sm font-semibold mb-5"></p>
+            <div class="border-t border-pink-50 pt-4 text-left">
+                <p class="text-[9px] text-gray-400 font-bold mb-2 uppercase">Note</p>
+                <input type="text" id="personal-input" placeholder="..." class="w-full border border-pink-50 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-pink-200 mb-3 bg-white/50">
+                <button onclick="savePersonal()" class="w-full bg-purple-400 text-white font-bold py-2 rounded-full text-xs active:scale-95 transition-transform">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+     if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('SW Registered'))
+                    .catch(err => console.log('SW Failed', err));
+            });
+        }
+        
+
+      
+        const emojiMap = { album:'1f4bf', concert:'1f3df', yt:'1f4f9', bday:'1f382', heart:'1f49c', star:'2b50', flower:'1f338', sparkle:'2728', flag:'1f1f2-1f1fd', shop:'1f6cd', tv:'1f4fa' };
+        const getEmojiUrl = (c) => `https://cdnjs.cloudflare.com/ajax/libs/emoji-datasource-apple/15.0.0/img/apple/64/${c}.png`;
+
+        const btsEvents = {
+            "2026-02-18": { type: 'bday', desc: "Hoseok Day! 🐿️" },
+            "2026-03-09": { type: 'bday', desc: "Yoongi Day! 🐱" },
+            "2026-03-15": { type: 'yt', desc: "YouTube: 'Arirang' MV Teaser 1" },
+            "2026-03-18": { type: 'yt', desc: "YouTube: 'Arirang' MV Teaser 2" },
+            "2026-03-20": { type: 'album', desc: "ARIRANG Album Release! 💿" },
+            "2026-03-21": { type: 'tv', desc: "Comeback Special Live: BANGTANTV" },
+            "2026-03-24": { type: 'yt', desc: "BANGTANTV: Arirang Jacket Shoot Episode" },
+            "2026-03-27": { type: 'tv', desc: "Suchwita Arirang Special (Guest: OT7)" },
+            "2026-05-01": { type: 'star', desc: "Tour Rehearsals: CDMX Stadium Prep" },
+            "2026-05-07": { type: 'flag', desc: "BTS TOUR: Mexico City - Day 1 🇲🇽", isMexico: true },
+            "2026-05-09": { type: 'flag', desc: "BTS TOUR: Mexico City - Day 2 🇲🇽", isMexico: true },
+            "2026-05-10": { type: 'flag', desc: "BTS TOUR: Mexico City - Day 3 🇲🇽", isMexico: true },
+            "2026-05-15": { type: 'yt', desc: "BANGTAN BOMB: Mexico Food Tour" },
+            "2026-06-01": { type: 'flower', desc: "BTS FESTA 2026 Begins! 🌸" },
+            "2026-06-08": { type: 'yt', desc: "Run BTS! 2026 Special (Part 1)" },
+            "2026-06-12": { type: 'shop', desc: "Arirang Pop-Up Store Opens: CDMX 🛍️", isMexico: true },
+            "2026-06-13": { type: 'heart', desc: "BTS 13th ANNIVERSARY! 💜" },
+            "2026-06-15": { type: 'yt', desc: "Run BTS! 2026 Special (Part 2)" },
+            "2026-09-01": { type: 'bday', desc: "Jungkook Day! 🐰" },
+            "2026-09-12": { type: 'bday', desc: "Namjoon Day! 🐨" },
+            "2026-10-13": { type: 'bday', desc: "Jimin Day! 🐥" },
+            "2026-12-04": { type: 'bday', desc: "Seokjin Day! 🐹" },
+            "2026-12-30": { type: 'bday', desc: "Taehyung Day! 🐯" }
+        };
+
+        let personalEvents = JSON.parse(localStorage.getItem('army_personal_events') || '{}');
+        let activeKey = null;
+        let viewDate = new Date();
+
+        function toggleAudio() {
+            const audio = document.getElementById('bg-audio');
+            const btn = document.getElementById('play-btn');
+            const title = document.getElementById('song-title');
+            if (audio.paused) {
+                audio.play();
+                btn.innerHTML = '<i class="fas fa-pause"></i>';
+                title.innerText = "Streaming: Lofi Girl x BTS Radio 💜";
+            } else {
+                audio.pause();
+                btn.innerHTML = '<i class="fas fa-play"></i>';
+                title.innerText = "Paused";
+            }
+        }
+
+        function updateKST() {
+            const now = new Date();
+            const kst = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (9 * 3600000));
+            document.getElementById('kst-time').innerText = `KST: ${kst.getHours().toString().padStart(2,'0')}:${kst.getMinutes().toString().padStart(2,'0')}:${kst.getSeconds().toString().padStart(2,'0')}`;
+        }
+
+        function updateCountdown() {
+            const anniversary = new Date('2026-06-13T00:00:00');
+            const diff = anniversary - new Date();
+            const display = document.getElementById('countdown');
+            if(diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                display.innerText = `${days} Days to 13th Anniversary`;
+            } else { display.innerText = `Happy Anniversary! 💜`; }
+        }
+
+        function render() {
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
+            const y = viewDate.getFullYear();
+            const m = viewDate.getMonth();
+            document.getElementById('current-month').innerText = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(viewDate);
+            const first = new Date(y, m, 1).getDay();
+            const last = new Date(y, m + 1, 0).getDate();
+            const todayStr = new Date().toISOString().split('T')[0];
+            for(let i=0; i<first; i++) grid.appendChild(document.createElement('div'));
+            for(let d=1; d<=last; d++) {
+                const key = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                const cell = document.createElement('div');
+                cell.className = 'day-cell';
+                cell.innerText = d;
+                if(key === todayStr) cell.classList.add('today');
+                const ev = btsEvents[key];
+                if(ev) {
+                    cell.classList.add('has-event');
+                    if(ev.isMexico) {
+                        cell.classList.add('has-mexico');
+                        const dot = document.createElement('div');
+                        dot.className = 'mexico-dot';
+                        cell.appendChild(dot);
+                    }
+                }
+                if(personalEvents[key]) cell.classList.add('has-personal');
+                cell.onclick = () => openModal(key);
+                grid.appendChild(cell);
+            }
+        }
+
+        function openModal(key) {
+            activeKey = key;
+            const ev = btsEvents[key];
+            const personal = personalEvents[key];
+            document.getElementById('modal-emoji-box').innerHTML = `<div class="a-emoji w-16 h-16" style="background-image: url('${getEmojiUrl(ev ? emojiMap[ev.type] : emojiMap.star)}')"></div>`;
+            document.getElementById('modal-date').innerText = new Date(key).toDateString();
+            document.getElementById('modal-desc').innerText = ev ? ev.desc : (personal ? personal : "Special BTS Day ✨");
+            document.getElementById('personal-input').value = personal || "";
+            document.getElementById('event-modal').style.display = 'flex';
+        }
+
+        function savePersonal() {
+            const val = document.getElementById('personal-input').value;
+            if(val) personalEvents[activeKey] = val;
+            else delete personalEvents[activeKey];
+            localStorage.setItem('army_personal_events', JSON.stringify(personalEvents));
+            closeModal(); render();
+        }
+
+        async function enableNotifsOnOpen() {
+            if (!("Notification" in window)) return;
+            if (Notification.permission === "default") await Notification.requestPermission();
+        }
+
+        function changeMonth(s) { viewDate.setMonth(viewDate.getMonth() + s); render(); }
+        function closeModal() { document.getElementById('event-modal').style.display = 'none'; }
+
+        window.onload = () => {
+            const today = new Date();
+            document.getElementById('today-display').innerText = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            render();
+            setInterval(updateKST, 1000);
+            updateCountdown();
+            enableNotifsOnOpen();
+        }
+    </script>
+</body>
+</html>
